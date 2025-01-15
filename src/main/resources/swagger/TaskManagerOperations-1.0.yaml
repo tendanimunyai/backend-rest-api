@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: Task Manager Operations
+  description: Task Manager - Operations
+  version: 1.0.0
+servers:
+  - url: 'http://{ENV}:8080/api/taskmanager/operations/v1'
+    variables:
+      ENV:
+        enum:
+          - localhost
+          - ''
+        default: localhost
+paths:
+  /save:
+    description: Task manager
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        200:
+          description: Task Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+  /tasks:
+    description: This is a Search Function that Returns a Page Result Of Tasks
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        200:
+          description: "Search Results if any were found matching criteria"
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/SearchResponse'
+components:
+  parameters:
+    X-RequestId:
+      name: X-Request-ID
+      in: header
+      required: true
+      description: A unique identifier for each API interaction. The intent of the header is to provide an identifier to use for technical support queries between systems.
+      schema:
+        type: string
+  schemas:
+    SearchRequest:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          default: 100
+        pageNumber:
+          type: integer
+          default: 0
+        id:
+          type: integer
+        text:
+          type: string
+      required:
+        - pageSize
+        - pageNumber
+    SearchResponse:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+        totalPages:
+          type: integer
+        results:
+          default: [ ]
+          items:
+            $ref: '#/components/schemas/Task'
+    TaskResponse:
+      type: object
+      properties:
+        Task:
+          $ref: '#/components/schemas/Task'
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+        text:
+          type: string

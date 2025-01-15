@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--OCEP App Configuration-->
+<configuration>
+    <properties fileName="symbolcolour.properties"/>
+    <properties fileName="app/ocep-app.properties"/>
+</configuration>

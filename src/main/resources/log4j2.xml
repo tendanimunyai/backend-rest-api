@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <Patternlayout
+                    pattern="%d: ${env:KUBE_POD_NAME} : %6p : [SID:%X{sessionId} RQID:%X{requestId}] : [%c{1}] : %m %n"/>
+        </Console>
+        <RollingFile
+                name="rollingfile"
+                fileName="/opt/logs/taskmanager/server.log"
+                filePattern="/opt/logs/taskmanager/server.%d{yyyyMMdd-HHmmss}.log.gz"
+                ignoreExceptions="false">
+            <PatternLayout>
+                <Pattern>%d: $${env:KUBE_POD_NAME} : %6p : [SID:%X{sessionId} RQID:%X{requestId}] : [%c{1}] : %m %n
+                </Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="4"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="za.co.fnb.taskmanager" level="TRACE" additivity="false">
+            <Appenderref ref="console"/>
+            <Appenderref ref="rollingfile"/>
+        </Logger>
+        <Logger name="org.springframework.boot.web.embedded.tomcat.TomcatWebServer" level="DEBUG" additivity="false">
+            <Appenderref ref="console"/>
+            <Appenderref ref="rollingfile"/>
+        </Logger>
+        <Root level="INFO">
+            <Appenderref ref="console"/>
+            <Appenderref ref="rollingfile"/>
+        </Root>
+    </Loggers>
+</Configuration>
